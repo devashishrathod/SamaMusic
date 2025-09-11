@@ -32,14 +32,14 @@ const userSchema = new mongoose.Schema(
         message: (props) => `${props.value} is not a valid mobile number`,
       },
     },
-    referCode: { type: String, unique: true },
-    appliedReferalCode: { type: String },
+    // referCode: { type: String, unique: true },
+    // appliedReferalCode: { type: String },
     lastActivity: { type: Date, default: Date.now },
     lastLocation: { lat: Number, lng: Number },
     currentLocation: { lat: Number, lng: Number },
     fcmToken: { type: String },
     image: { type: String },
-    uniqueId: { type: String, unique: true },
+    // uniqueId: { type: String, unique: true },
     currentScreen: { type: String, default: "LANDING_SCREEN" },
     isEmailVerified: { type: Boolean, default: false },
     isMobileVerified: { type: Boolean, default: false },
@@ -52,7 +52,8 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.methods.getSignedJwtToken = function (options = {}) {
-  const { expiresIn, secret } = options;
+  const expiresIn = options.expiresIn || "7d";
+  const secret = options.secret || process.env.JWT_SECRET;
   return jwt.sign({ id: this._id, role: this.role }, secret, { expiresIn });
 };
 
@@ -64,10 +65,7 @@ userSchema.methods.getSignedJwtToken = function (options = {}) {
 // });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  console.log(enteredPassword, "pass", this.password);
-  const d = await bcrypt.compare(enteredPassword, this.password);
-  console.log("d", d);
-  return d;
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 userSchema.pre("save", async function (next) {

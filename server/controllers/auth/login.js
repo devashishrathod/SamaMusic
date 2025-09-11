@@ -12,17 +12,7 @@ exports.login = asyncWrapper(async (req, res) => {
   }).select("+password");
   if (!user) throwError(400, "User not found for this email");
   const passwordMatch = await user.matchPassword(password);
-  console.log(passwordMatch, "pp", !passwordMatch);
   if (!passwordMatch) throwError(403, "Wrong password");
-  const token = user.getSignedJwtToken({
-    expiresIn: "7d",
-    secret: process.env.JWT_SECRET,
-  });
-  //   const token = jwt.sign(
-  //     { _id: userData._id, role: userData.role },
-  //     process.env.JWT_SECRET,
-  //     { expiresIn: "7d" }
-  //   );
-  //   await userData.save();
+  const token = user.getSignedJwtToken();
   return sendSuccess(res, 200, "User Loggedin Successfully", { user, token });
 });
