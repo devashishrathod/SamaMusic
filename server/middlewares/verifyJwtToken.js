@@ -1,30 +1,19 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-// const { getUserById } = require("../service/userServices");
+const { getUserById } = require("../services/users");
+const { throwError, asyncWrapper } = require("../utils");
 
-exports.verifyJwtToken = async (req, res, next) => {
+exports.verifyJwtToken = asyncWrapper(async (req, res, next) => {
   let token = req.headers["authorization"];
-  try {
-    if (!token) {
-      return res.status(401).json({ msg: "Access Denied!", success: false });
-    }
-    let splitToken = token.split(" ")[1];
-    if (!splitToken) {
-      return res.status(401).json({ msg: "Access Denied!", success: false });
-    }
-    const decodedToken = jwt.verify(splitToken, process.env.JWT_SECRET);
-    if (!decodedToken) {
-      return res.status(401).json({ msg: "Access Denied!", success: false });
-    }
-    const checkUser = await getUserById(decodedToken?._id);
-    if (checkUser) {
-      req.payload = checkUser;
-      next();
-    } else {
-      return res.status(401).json({ msg: "Access Denied!", success: false });
-    }
-  } catch (error) {
-    console.log("error on auth: ", error);
-    return res.status(500).json({ err: error.message, error, success: false });
-  }
-};
+  if (!token) throwError(401, "Access Denied! Missing authorized token");
+  let splitToken = token.split(" ")[1];
+  if (!splitToken) throwError(403, "Access Denied! Invalid authorized token");
+  const decodedToken = jwt.verify(splitToken, process.env.JWT_SECRET);
+  if (!decodedToken) throwError(403, "Access Denied! Wrong authorized token");
+  const user = await getUserById(decodedToken?.id);
+  if (!user) throwError(404, "Access Denied! User not found");
+  req.userId = user?._id;
+  req.role = user?.role;
+  req.user = user;
+  next();
+});
