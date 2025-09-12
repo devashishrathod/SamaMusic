@@ -4,7 +4,7 @@ require("dotenv").config();
 exports.generateJwtToken = async (user) => {
   return jwt.sign(
     {
-      _id: user?._id,
+      id: user?._id,
       name: user?.name,
       email: user?.email,
       role: user?.role,

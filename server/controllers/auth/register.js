@@ -6,7 +6,8 @@ exports.register = asyncWrapper(async (req, res) => {
   let { name, email, password, mobile, role } = req.body;
   role = role || ROLES.USER;
   const user = await User.findOne({
-    $or: [{ mobile }, { email }],
+    email: email,
+    role: role,
     isDeleted: false,
   });
   if (user) {
