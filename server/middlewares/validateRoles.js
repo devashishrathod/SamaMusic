@@ -1,10 +1,22 @@
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const { ROLES } = require("../constants");
-const { throwError } = require("../utils");
+const { getUserById } = require("../services/users");
+const { throwError, asyncWrapper } = require("../utils");
 
-exports.validateRoles = (...allowedRoles) => {
-  return (req, res, next) => {
-    const user = req.user;
-    if (!user) throwError(404, "User not found");
+const validateRoles = (...allowedRoles) =>
+  asyncWrapper(async (req, res, next) => {
+    let token = req.headers["authorization"];
+    if (!token) throwError(401, "Access Denied! Missing authorized token");
+    let splitToken = token.split(" ")[1];
+    if (!splitToken) throwError(403, "Access Denied! Invalid authorized token");
+    const decodedToken = jwt.verify(splitToken, process.env.JWT_SECRET);
+    if (!decodedToken) throwError(403, "Access Denied! Wrong authorized token");
+    const user = await getUserById(decodedToken?.id);
+    if (!user) throwError(404, "Access Denied! User not found");
+    req.userId = user?._id;
+    req.role = user?.role;
+    req.user = user;
     if (!allowedRoles.includes(user.role)) {
       throwError(
         403,
@@ -12,8 +24,13 @@ exports.validateRoles = (...allowedRoles) => {
       );
     }
     next();
-  };
-};
+  });
 
-exports.isAdmin = this.validateRoles(ROLES.ADMIN);
-exports.isUser = this.validateRoles(ROLES.USER);
+const isAdmin = validateRoles(ROLES.ADMIN);
+const isUser = validateRoles(ROLES.USER);
+
+module.exports = {
+  validateRoles,
+  isAdmin,
+  isUser,
+};
