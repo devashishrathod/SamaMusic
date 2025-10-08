@@ -32,4 +32,6 @@ module.exports = {
     PREMIUM: "premium",
     Family: "family",
   }),
+
+  DEFAULT_PASSWORD: "SamaMusic@123",
 };
