@@ -3,9 +3,9 @@ const { ROLES } = require("../../constants");
 const { asyncWrapper, sendSuccess, throwError } = require("../../utils");
 
 exports.login = asyncWrapper(async (req, res) => {
-  let { email, password, role } = req.body;
+  let { email, password, role, fcmToken } = req.body;
   role = role || ROLES.USER;
-  const user = await User.findOne({
+  let user = await User.findOne({
     email: email,
     role: role,
     isDeleted: false,
@@ -13,6 +13,8 @@ exports.login = asyncWrapper(async (req, res) => {
   if (!user) throwError(400, "User not found for this email");
   const passwordMatch = await user.matchPassword(password);
   if (!passwordMatch) throwError(403, "Wrong password");
+  if (fcmToken) user.fcmToken = fcmToken;
+  user = await user.save();
   const token = user.getSignedJwtToken();
   return sendSuccess(res, 200, "User Loggedin Successfully", { user, token });
 });
