@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema(
     isMobileVerified: { type: Boolean, default: false },
     isSignUpCompleted: { type: Boolean, default: false },
     isOnBoardingCompleted: { type: Boolean, default: false },
+    //isOnline: { type: Boolean },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },

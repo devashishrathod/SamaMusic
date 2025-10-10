@@ -3,7 +3,7 @@ const { SUBSCRIPTION_TYPES } = require("../constants");
 
 exports.validateCreateSubscription = (data) => {
   const createSchema = Joi.object({
-    name: Joi.string().trim().min(2).required(),
+    name: Joi.string().trim().min(3).required(),
     description: Joi.string().allow("").max(500).messages({
       "string.max": "Description cannot exceed {#limit} characters",
     }),
