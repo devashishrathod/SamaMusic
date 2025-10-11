@@ -33,5 +33,6 @@ module.exports = {
     Family: "family",
   }),
 
-  DEFAULT_PASSWORD: "SamaMusic@123",
+  DEFAULT_CATEGORY_IMAGE:
+    "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/hrhc8iwbjl2qnnqu9kaq?_a=BAMAK+Jw0",
 };
