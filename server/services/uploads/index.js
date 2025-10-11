@@ -40,4 +40,6 @@ exports.uploadPDF = async (pdfPath, fileName) => {
   return result.secure_url;
 };
 
-exports.deleteCloudinaryFile = deleteFile;
+exports.deleteImage = async (url) => deleteFile(url, "image");
+exports.deleteVideo = async (url) => deleteFile(url, "video");
+exports.deleteAudio = async (url) => deleteFile(url, "raw");

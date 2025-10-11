@@ -4,29 +4,41 @@ exports.validateCreateCategory = (data) => {
   const createSchema = Joi.object({
     name: Joi.string().min(3).max(120).required().messages({
       "string.min": "Name has minimum {#limit} characters",
+      "string.max": "Name cannot exceed {#limit} characters",
     }),
     description: Joi.string().allow("").max(300).messages({
       "string.max": "Description cannot exceed {#limit} characters",
     }),
     isActive: Joi.boolean().optional(),
   });
-  return createSchema.validate(data);
+  return createSchema.validate(data, { abortEarly: false });
 };
 
-// const updateCategory = Joi.object({
-//   name: Joi.string().min(1).max(120).optional(),
-//   description: Joi.string().allow("").max(2000).optional(),
-//   isActive: Joi.boolean().optional(),
-// });
+exports.validateUpdateCategory = (payload) => {
+  const updateSchema = Joi.object({
+    name: Joi.string().min(3).max(120).messages({
+      "string.min": "Name has minimum {#limit} characters",
+      "string.max": "Name cannot exceed {#limit} characters",
+    }),
+    description: Joi.string().allow("").max(300).messages({
+      "string.max": "Description cannot exceed {#limit} characters",
+    }),
+    isActive: Joi.boolean().optional(),
+  });
+  return updateSchema.validate(payload, { abortEarly: false });
+};
 
-// const getAllQuery = Joi.object({
-//   page: Joi.number().integer().min(1).default(1),
-//   limit: Joi.number().integer().min(1).max(200).default(20),
-//   sortBy: Joi.string().optional(), // e.g. "name:asc" or "createdAt:desc"
-//   search: Joi.string().allow("").optional(),
-//   isActive: Joi.boolean().optional(),
-//   startDate: Joi.date().iso().optional(),
-//   endDate: Joi.date().iso().optional(),
-//   name: Joi.string().optional(),
-//   description: Joi.string().optional(),
-// });
+exports.validateGetAllCategoriesQuery = (payload) => {
+  const getAllQuerySchema = Joi.object({
+    page: Joi.number().integer().min(1).optional(),
+    limit: Joi.number().integer().min(1).optional(),
+    search: Joi.string().optional(),
+    name: Joi.string().optional(),
+    isActive: Joi.alternatives().try(Joi.string(), Joi.boolean()).optional(),
+    fromDate: Joi.date().iso().optional(),
+    toDate: Joi.date().iso().optional(),
+    sortBy: Joi.string().optional(),
+    sortOrder: Joi.string().valid("asc", "desc").optional(),
+  });
+  return getAllQuerySchema.validate(payload, { abortEarly: false });
+};

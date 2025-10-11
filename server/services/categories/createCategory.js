@@ -3,8 +3,9 @@ const { throwError } = require("../../utils");
 const { uploadImage } = require("../uploads");
 
 exports.createCategory = async (payload, image) => {
-  let { name, description } = payload;
+  let { name, description, isActive } = payload;
   name = name?.toLowerCase();
+  description = description?.toLowerCase();
   const existingCategory = await Category.findOne({
     name: name,
     isDeleted: false,
@@ -16,8 +17,9 @@ exports.createCategory = async (payload, image) => {
   if (image) imageUrl = await uploadImage(image.tempFilePath);
   const newCategory = await Category.create({
     name,
-    description: description?.toLowerCase(),
+    description,
     image: imageUrl,
+    isActive,
   });
   return newCategory;
 };
