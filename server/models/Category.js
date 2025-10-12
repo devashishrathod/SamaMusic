@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const { DEFAULT_CATEGORY_IMAGE } = require("../constants");
+const { DEFAULT_IMAGES } = require("../constants");
 
 const categorySchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
-    image: { type: String, default: DEFAULT_CATEGORY_IMAGE },
+    image: { type: String, default: DEFAULT_IMAGES.CATEGORY },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },
