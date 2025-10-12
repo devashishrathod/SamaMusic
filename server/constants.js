@@ -33,5 +33,10 @@ module.exports = {
     Family: "family",
   }),
 
-  DEFAULT_PASSWORD: "SamaMusic@123",
+  DEFAULT_IMAGES: Object.freeze({
+    CATEGORY:
+      "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/hrhc8iwbjl2qnnqu9kaq?_a=BAMAK+Jw0",
+    SUBCATEGORY:
+      "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/zsbowllown6ddeb4jnw0?_a=BAMAK+Jw0",
+  }),
 };

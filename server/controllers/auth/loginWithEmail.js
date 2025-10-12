@@ -1,5 +1,6 @@
+const defaultPassword = process.env.DEFAULT_PASSWORD;
 const User = require("../../models/User");
-const { ROLES, DEFAULT_PASSWORD } = require("../../constants");
+const { ROLES } = require("../../constants");
 const { asyncWrapper, sendSuccess, generateOTP } = require("../../utils");
 const { sendLoginOtpMail } = require("../../helpers/nodeMailer");
 
@@ -17,12 +18,11 @@ exports.loginWithEmail = asyncWrapper(async (req, res) => {
     isDeleted: false,
   }).select("+password");
   if (!user) {
-    console.log(DEFAULT_PASSWORD, "gejjej");
     isFirst = true;
     user = User.create({
       email,
       role,
-      password: DEFAULT_PASSWORD,
+      password: defaultPassword,
       otp: updatedData,
     });
   } else {
