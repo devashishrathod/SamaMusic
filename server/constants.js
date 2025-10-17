@@ -4,6 +4,14 @@ module.exports = {
     USER: "user",
   }),
 
+  LOGIN_TYPES: Object.freeze({
+    EMAIL: "email",
+    MOBILE: "mobile",
+    GOOGLE: "google",
+    PASSWORD: "password",
+    OTHER: "other",
+  }),
+
   PLATFORMS: Object.freeze({
     WEB: "web",
     ANDROID: "android",

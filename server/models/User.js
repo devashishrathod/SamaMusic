@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { ROLES } = require("../constants");
+const { ROLES, LOGIN_TYPES } = require("../constants");
 const { isValidPhoneNumber } = require("../validator/common");
 
 const userSchema = new mongoose.Schema(
@@ -15,7 +15,12 @@ const userSchema = new mongoose.Schema(
       enum: [...Object.values(ROLES)],
       default: ROLES.USER,
     },
-    password: { type: String },
+    loginType: {
+      type: String,
+      enum: [...Object.values(LOGIN_TYPES)],
+      default: LOGIN_TYPES.PASSWORD,
+    },
+    password: { type: String, required: true },
     email: {
       type: String,
       lowercase: true,
@@ -39,7 +44,6 @@ const userSchema = new mongoose.Schema(
     currentLocation: { lat: Number, lng: Number },
     fcmToken: { type: String },
     image: { type: String },
-    loginType: { type: String },
     // uniqueId: { type: String, unique: true },
     otp: { code: String, expiresAt: Date },
     currentScreen: { type: String, default: "LANDING_SCREEN" },
@@ -47,7 +51,8 @@ const userSchema = new mongoose.Schema(
     isMobileVerified: { type: Boolean, default: false },
     isSignUpCompleted: { type: Boolean, default: false },
     isOnBoardingCompleted: { type: Boolean, default: false },
-    //isOnline: { type: Boolean },
+    isLoggedIn: { type: Boolean, default: false },
+    isOnline: { type: Boolean },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },
