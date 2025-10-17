@@ -41,6 +41,7 @@ exports.sendLoginOtpMail = (email, otp) => {
       console.error("Error sending email:", error);
       return { error: error };
     } else {
+      console.log(`OTP sent to ${email}`);
       return { success: true, message: info.response };
     }
   });

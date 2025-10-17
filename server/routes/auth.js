@@ -4,13 +4,17 @@ const router = express.Router();
 const {
   register,
   login,
-  loginWithEmail,
+  loginOrSignInWithEmail,
   verifyOtpWithEmail,
+  loginOrSignInWithMobile,
+  verifyOtpWithMobile,
 } = require("../controllers/auth");
 
 router.post("/register", register);
 router.post("/login", login);
-router.post("/login-with-email", loginWithEmail);
-router.put("/verify-otp", verifyOtpWithEmail);
+router.post("/loginOrSignin-with-email", loginOrSignInWithEmail);
+router.put("/verify-otp-email", verifyOtpWithEmail);
+router.post("/loginOrSignin-with-mobile", loginOrSignInWithMobile);
+router.put("/verify-otp-mobile", verifyOtpWithMobile);
 
 module.exports = router;

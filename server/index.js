@@ -17,6 +17,9 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 app.use("/sama-music/", allRoutes);
+app.get("/", async (req, res) => {
+  res.send("Welcome to Sama Songs🎶🚀");
+});
 app.use((req, res, next) => {
   throwError(404, "Invalid API");
 });
