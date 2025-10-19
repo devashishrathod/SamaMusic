@@ -14,5 +14,10 @@ exports.createSubCategory = asyncWrapper(async (req, res) => {
   const { error } = validateCreateSubCategory(req.body);
   if (error) throwError(422, error.details.map((d) => d.message).join(", "));
   const subCategory = await createSubCategory(categoryId, req.body, image);
-  return sendSuccess(res, 201, "Sub-category created", subCategory);
+  return sendSuccess(
+    res,
+    201,
+    "Sub-category created successfully",
+    subCategory
+  );
 });

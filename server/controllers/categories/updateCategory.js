@@ -7,5 +7,5 @@ exports.updateCategory = asyncWrapper(async (req, res) => {
   if (error) throwError(422, error.details.map((d) => d.message).join(", "));
   const image = req.files?.image;
   const updated = await updateCategoryById(req.params?.id, req.body, image);
-  return sendSuccess(res, 200, "Category updated", updated);
+  return sendSuccess(res, 200, "Category updated successfully", updated);
 });

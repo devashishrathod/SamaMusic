@@ -7,5 +7,5 @@ exports.createCategory = asyncWrapper(async (req, res) => {
   if (error) throwError(422, error.details.map((d) => d.message).join(", "));
   const image = req.files?.image;
   const category = await createCategory(req.body, image);
-  return sendSuccess(res, 201, "Category created", category);
+  return sendSuccess(res, 201, "Category created successfully", category);
 });

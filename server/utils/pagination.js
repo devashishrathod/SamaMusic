@@ -21,7 +21,12 @@ exports.pagination = async (model, pipeline, page = 1, limit = 10) => {
   ];
   const result = await model.aggregate(facetPipeline);
   const { data, totalCount = 0 } = result[0] || {};
-  if (!data || data.length === 0) throwError(404, "No data found");
+  if (!data || data.length === 0) {
+    const modelName = model.modelName
+      ? model.modelName.toLowerCase()
+      : "record";
+    throwError(404, `No any ${modelName} found`);
+  }
   return {
     total: totalCount,
     totalPages: Math.ceil(totalCount / limit),
