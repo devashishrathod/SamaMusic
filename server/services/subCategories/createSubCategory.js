@@ -10,8 +10,8 @@ exports.createSubCategory = async (categoryId, payload, image) => {
   name = name?.toLowerCase();
   description = description?.toLowerCase();
   const existingSubCategory = await SubCategory.findOne({
-    name: name,
-    categoryId: categoryId,
+    name,
+    categoryId,
     isDeleted: false,
   });
   if (existingSubCategory) {
