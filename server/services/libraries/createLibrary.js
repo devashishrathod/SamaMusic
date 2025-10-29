@@ -1,22 +1,26 @@
-const Category = require("../../models/Category");
+const Library = require("../../models/Library");
 const { throwError } = require("../../utils");
 const { uploadImage } = require("../uploads");
 
-exports.createCategory = async (payload, image) => {
+exports.createLibrary = async (userId, payload, image) => {
   let { name, description, isActive } = payload;
   name = name?.toLowerCase();
   description = description?.toLowerCase();
-  const existingCategory = await Category.findOne({ name, isDeleted: false });
-  if (existingCategory) {
-    throwError(400, "Category already exist with this name");
+  const existingLibrary = await Library.findOne({
+    name,
+    createdBy: userId,
+    isDeleted: false,
+  });
+  if (existingLibrary) {
+    throwError(400, "You have already a library with this name");
   }
   let imageUrl;
   if (image) imageUrl = await uploadImage(image.tempFilePath);
-  const newCategory = await Category.create({
+  return await Library.create({
     name,
     description,
+    createdBy: userId,
     image: imageUrl,
     isActive,
   });
-  return newCategory;
 };
