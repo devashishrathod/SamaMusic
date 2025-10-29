@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isAdmin, verifyJwtToken } = require("../middlewares");
+// const { isAdmin, verifyJwtToken } = require("../middlewares");
 const {
   createCategory,
   getAllCategories,
@@ -10,10 +10,10 @@ const {
   deleteCategory,
 } = require("../controllers/categories");
 
-router.post("/create", isAdmin, createCategory);
-router.get("/getAll", verifyJwtToken, getAllCategories);
-router.get("/get/:id", verifyJwtToken, getCategory);
-router.put("/update/:id", isAdmin, updateCategory);
-router.delete("/delete/:id", isAdmin, deleteCategory);
+router.post("/create", createCategory); //isAdmin,
+router.get("/getAll", getAllCategories); // verifyJwtToken,
+router.get("/get/:id", getCategory); //  verifyJwtToken,
+router.put("/update/:id", updateCategory); //isAdmin,
+router.delete("/delete/:id", deleteCategory); //isAdmin,
 
 module.exports = router;
