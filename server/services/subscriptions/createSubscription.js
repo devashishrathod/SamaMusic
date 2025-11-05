@@ -1,26 +1,38 @@
 const Subscription = require("../../models/Subscription");
-const { DURATION_MAP } = require("../../constants");
+const { computeDuration } = require("../../helpers/subscriptions");
 const { throwError } = require("../../utils");
 
-const computeDuration = (type) => {
-  const days = DURATION_MAP[type];
-  if (!days)
-    throwError(400, "Invalid subscription type for duration calculation");
-  return days;
-};
-
 exports.createSubscription = async (payload) => {
-  if (!payload.type) throwError(400, "Subscription type is required");
-  payload.durationInDays = computeDuration(payload?.type);
-  const existing = await Subscription.findOne({
-    name: payload?.name,
-    type: payload?.type,
+  let { name, description, price, type, benefits, limitations, isActive } =
+    payload;
+  name = name?.trim().toLowerCase();
+  type = type?.trim().toLowerCase();
+  if (!type) throwError(400, "Subscription type is required");
+  const existingSubscription = await Subscription.findOne({
+    name,
+    type,
     isDeleted: false,
   });
-  if (existing)
+  if (existingSubscription)
     throwError(
       409,
-      `Subscription with this name for ${payload.type} plan already exists`
+      `Subscription with this name for ${type} plan already exists`
     );
-  return await Subscription.create(payload);
+  const durationInDays = computeDuration(type);
+  description = description?.trim().toLowerCase();
+  price = parseFloat(price);
+  benefits = benefits?.map((benefit) => benefit?.trim().toLowerCase());
+  limitations = limitations?.map((limitation) =>
+    limitation?.trim().toLowerCase()
+  );
+  return await Subscription.create({
+    name,
+    description,
+    price,
+    type,
+    durationInDays,
+    benefits,
+    limitations,
+    isActive,
+  });
 };

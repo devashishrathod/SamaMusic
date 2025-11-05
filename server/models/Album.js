@@ -5,7 +5,10 @@ const albumSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
-    image: { type: String, default: DEFAULT_IMAGES.CATEGORY },
+    // artist: { type: String, trim: true },
+    // releaseDate: { type: Date, default: Date.now },
+    // movie: { type: String, trim: true },
+    image: { type: String, default: DEFAULT_IMAGES.ALBUM },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },

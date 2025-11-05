@@ -1,3 +1,4 @@
 const { createSubscription } = require("./createSubscription");
+const { getAllSubscriptions } = require("./getAllSubscriptions");
 
-module.exports = { createSubscription };
+module.exports = { createSubscription, getAllSubscriptions };

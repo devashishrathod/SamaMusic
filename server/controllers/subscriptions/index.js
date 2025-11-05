@@ -1,3 +1,4 @@
-const { createSubscription } = require("./createSubscription");
+const { create } = require("./create");
+const { getAll } = require("./getAll");
 
-module.exports = { createSubscription };
+module.exports = { create, getAll };

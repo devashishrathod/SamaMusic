@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const { isAdmin, verifyJwtToken } = require("../middlewares");
-const { create, getAll } = require("../controllers/subscriptions");
+const { create } = require("../controllers/musics");
 
 router.post("/add", isAdmin, create);
-router.get("/getAll", verifyJwtToken, getAll);
 
 module.exports = router;
