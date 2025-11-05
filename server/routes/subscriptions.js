@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { isAdmin } = require("../middlewares");
-const { createSubscription } = require("../controllers/subscriptions");
+const { isAdmin, verifyJwtToken } = require("../middlewares");
+const { create, getAll } = require("../controllers/subscriptions");
 
-router.post("/add", isAdmin, createSubscription);
+router.post("/add", isAdmin, create);
+router.get("/getAll", verifyJwtToken, getAll);
 
 module.exports = router;
