@@ -24,7 +24,7 @@ exports.validateCreateMusic = (data) => {
         if (typeof value === "string") return [value];
         if (Array.isArray(value)) return value;
         if (value && !Array.isArray(value))
-          throwError(422, "Artists is required");
+          throwError(422, "Artists must be an array or string");
       })
       .messages({
         "any.required": "Artists is required",
