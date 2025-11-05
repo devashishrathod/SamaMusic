@@ -17,10 +17,9 @@ exports.validateCreateSubscription = (data) => {
     type: Joi.string()
       .valid(...Object.values(SUBSCRIPTION_TYPES))
       .required(),
-    durationInDays: Joi.number().optional(),
     benefits: Joi.array().items(Joi.string()).optional(),
     limitations: Joi.array().items(Joi.string()).optional(),
     isActive: Joi.boolean().optional(),
   });
-  return createSchema.validate(data);
+  return createSchema.validate(data, { abortEarly: false });
 };
