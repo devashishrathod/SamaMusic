@@ -7,7 +7,7 @@ const librarySchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
     createdBy: userField,
-    image: { type: String, default: DEFAULT_IMAGES.CATEGORY },
+    image: { type: String, default: DEFAULT_IMAGES.LIBRARY },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },
