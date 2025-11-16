@@ -50,3 +50,22 @@ exports.validateCreateMusic = (data) => {
   });
   return schema.validate(data, { abortEarly: false });
 };
+
+exports.validateGetAllMusicsQuery = (payload) => {
+  const getAllQuerySchema = Joi.object({
+    page: Joi.number().integer().min(1).optional(),
+    limit: Joi.number().integer().min(1).optional(),
+    search: Joi.string().optional(),
+    title: Joi.string().optional(),
+    artist: Joi.string().optional(),
+    categoryId: objectId().optional(),
+    subCategoryId: objectId().optional(),
+    albumId: objectId().optional(),
+    isActive: Joi.alternatives().try(Joi.string(), Joi.boolean()).optional(),
+    fromDate: Joi.date().iso().optional(),
+    toDate: Joi.date().iso().optional(),
+    sortBy: Joi.string().optional(),
+    sortOrder: Joi.string().valid("asc", "desc").optional(),
+  });
+  return getAllQuerySchema.validate(payload, { abortEarly: false });
+};
