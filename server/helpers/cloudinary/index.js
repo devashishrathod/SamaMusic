@@ -1,4 +1,10 @@
 const cloudinary = require("../../configs/cloudinary");
+const CLOUD_BASE = process.env.CLOUD_BASE_URL;
+
+const isValidCloudinaryUrl = (url) => {
+  if (!url || typeof url !== "string") return false;
+  return url.startsWith(CLOUD_BASE) && url.includes("/upload/");
+};
 
 const extractPublicId = (url) => {
   if (!url) return null;
@@ -51,6 +57,10 @@ exports.getOptimizedImageUrl = (publicId) => {
  * @param {"image"|"video"|"raw"} [resourceType="image"] - Type of resource
  */
 exports.deleteFile = async (url, resourceType = "image") => {
+  if (!isValidCloudinaryUrl(url)) {
+    console.log("Skip delete → Not a Cloudinary URL:", url);
+    return false;
+  }
   const publicId = extractPublicId(url);
   if (!publicId) {
     console.warn("Invalid Cloudinary URL:", url);
