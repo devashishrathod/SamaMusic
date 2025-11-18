@@ -22,7 +22,7 @@ exports.updateAlbumById = async (id, payload = 0, image) => {
     if (description) album.description = description?.toLowerCase() || "";
   }
   if (image) {
-    if (Album.image) await deleteImage(album.image);
+    if (album.image) await deleteImage(album.image);
     const imageUrl = await uploadImage(image.tempFilePath);
     album.image = imageUrl;
   }

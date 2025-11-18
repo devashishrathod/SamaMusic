@@ -1,5 +1,6 @@
 const Library = require("../../models/Library");
 const { throwError, validateObjectId } = require("../../utils");
+const { deleteImage } = require("../uploads");
 
 exports.deleteLibraryById = async (userId, id) => {
   validateObjectId(id, "Library Id");
@@ -8,6 +9,7 @@ exports.deleteLibraryById = async (userId, id) => {
   if (library?.createdBy?.toString() !== userId?.toString()) {
     throwError(403, "You can't delete this library");
   }
+  await deleteImage(library?.image);
   library.isDeleted = true;
   library.isActive = false;
   library.updatedAt = new Date();

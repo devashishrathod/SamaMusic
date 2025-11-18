@@ -41,5 +41,5 @@ exports.uploadPDF = async (pdfPath, fileName) => {
 };
 
 exports.deleteImage = async (url) => deleteFile(url, "image");
-exports.deleteVideo = async (url) => deleteFile(url, "video");
-exports.deleteAudio = async (url) => deleteFile(url, "raw");
+exports.deleteAudioOrVideo = async (url) => deleteFile(url, "video");
+exports.deletePDF = async (url) => deleteFile(url, "auto");
