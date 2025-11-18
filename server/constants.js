@@ -43,14 +43,13 @@ module.exports = {
 
   DEFAULT_IMAGES: Object.freeze({
     CATEGORY:
-      "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/hrhc8iwbjl2qnnqu9kaq?_a=BAMAK+Jw0",
+      "https://t4.ftcdn.net/jpg/15/54/43/11/360_F_1554431124_YJnAIC7lp6um4hEb4Lop0NEWMUEyA96h.jpg",
     SUBCATEGORY:
-      "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/zsbowllown6ddeb4jnw0?_a=BAMAK+Jw0",
+      "https://media.istockphoto.com/id/615254324/vector/music-genres-signs-and-symbols.jpg?s=612x612&w=0&k=20&c=nsrIJ3p3MuArr7UkfK-knvBTr3SwIRXlqthKU-5TLCQ=",
     ALBUM:
-      "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/zsbowllown6ddeb4jnw0?_a=BAMAK+Jw0",
-    LIBRARY:
-      "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/zsbowllown6ddeb4jnw0?_a=BAMAK+Jw0",
+      "https://www.shutterstock.com/shutterstock/photos/1458500159/display_1500/stock-vector-music-album-logo-design-template-1458500159.jpg",
     MUSIC:
-      "https://res.cloudinary.com/drvdnqydw/image/upload/f_auto,q_auto/v1/Images/zsbowllown6ddeb4jnw0?_a=BAMAK+Jw0",
+      "https://img.freepik.com/free-vector/music-note-flat-style_78370-7394.jpg?semt=ais_incoming&w=740&q=80",
+    LIBRARY: "https://i1.sndcdn.com/avatars-000651302358-h75ud8-t240x240.jpg",
   }),
 };

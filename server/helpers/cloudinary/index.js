@@ -1,18 +1,24 @@
 const cloudinary = require("../../configs/cloudinary");
 
-const extractPublicId = (cloudinaryUrl) => {
-  if (!cloudinaryUrl || typeof cloudinaryUrl !== "string") return null;
+const extractPublicId = (url) => {
+  if (!url) return null;
   try {
-    const cleanUrl = cloudinaryUrl.split("?")[0];
-    const parts = cleanUrl.split("/");
-    const uploadIndex = parts.findIndex((part) => part === "upload");
-    if (uploadIndex === -1) return null;
-    const pathParts = parts.slice(uploadIndex + 1);
-    const fileName = pathParts.pop();
-    const publicId = `${pathParts.join("/")}/${fileName.split(".")[0]}`;
-    return publicId;
+    let clean = url.split("?")[0];
+    let afterUpload = clean.split("/upload/")[1];
+    if (!afterUpload) return null;
+    let parts = afterUpload.split("/");
+    while (
+      parts.length &&
+      (parts[0].includes(",") ||
+        (parts[0].startsWith("v") && !isNaN(parts[0].substring(1))))
+    ) {
+      parts.shift();
+    }
+    const last = parts.pop();
+    const filename = last.split(".")[0];
+    return [...parts, filename].join("/");
   } catch (err) {
-    console.error("Error extracting Cloudinary public_id:", err.message);
+    console.error("Public ID extract error:", err);
     return null;
   }
 };
@@ -20,6 +26,11 @@ const extractPublicId = (cloudinaryUrl) => {
 exports.uploadFile = async (filePath, options = {}) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, options);
+    console.log("Cloudinary Uploaded:", {
+      url: result.secure_url,
+      public_id: result.public_id,
+      resource_type: result.resource_type,
+    });
     return result;
   } catch (error) {
     console.error("Cloudinary Upload Error:", error);
@@ -39,21 +50,20 @@ exports.getOptimizedImageUrl = (publicId) => {
  * @param {string} cloudinaryUrl - Full Cloudinary URL
  * @param {"image"|"video"|"raw"} [resourceType="image"] - Type of resource
  */
-exports.deleteFile = async (cloudinaryUrl, resourceType = "image") => {
-  const publicId = extractPublicId(cloudinaryUrl);
+exports.deleteFile = async (url, resourceType = "image") => {
+  const publicId = extractPublicId(url);
   if (!publicId) {
-    console.warn("Invalid Cloudinary URL:", cloudinaryUrl);
+    console.warn("Invalid Cloudinary URL:", url);
     return false;
   }
   try {
     const result = await cloudinary.uploader.destroy(publicId, {
       resource_type: resourceType,
     });
-    if (result.result === "ok" || result.result === "not found") return true;
-    console.warn("Cloudinary deletion response:", result);
-    return false;
-  } catch (error) {
-    console.error("Cloudinary Deletion Error:", error.message);
+    console.log("Cloudinary delete:", { publicId, result });
+    return result.result === "ok" || result.result === "not found";
+  } catch (err) {
+    console.error("Cloudinary Delete Error:", err);
     return false;
   }
 };
