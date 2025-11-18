@@ -8,6 +8,8 @@ exports.deleteMusic = async (id) => {
   if (!music || music.isDeleted) throwError(404, "Music not found");
   await deleteAudioOrVideo(music?.audio);
   await deleteImage(music?.image);
+  music.audio = null;
+  music.image = null;
   music.isDeleted = true;
   music.isActive = false;
   music.updatedAt = new Date();

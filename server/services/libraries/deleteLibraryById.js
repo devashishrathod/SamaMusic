@@ -10,6 +10,7 @@ exports.deleteLibraryById = async (userId, id) => {
     throwError(403, "You can't delete this library");
   }
   await deleteImage(library?.image);
+  library.image = null;
   library.isDeleted = true;
   library.isActive = false;
   library.updatedAt = new Date();
