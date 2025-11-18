@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { isAdmin, verifyJwtToken } = require("../middlewares");
+const { isAdmin } = require("../middlewares");
 const {
   createAlbum,
   getAllAlbums,
@@ -11,8 +11,8 @@ const {
 } = require("../controllers/albums");
 
 router.post("/create", isAdmin, createAlbum);
-router.get("/getAll", verifyJwtToken, getAllAlbums);
-router.get("/get/:id", verifyJwtToken, getAlbum);
+router.get("/getAll", getAllAlbums);
+router.get("/get/:id", getAlbum);
 router.put("/update/:id", isAdmin, updateAlbum);
 router.delete("/delete/:id", isAdmin, deleteAlbum);
 
