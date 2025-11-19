@@ -7,6 +7,7 @@ exports.deleteAlbumById = async (id) => {
   const album = await Album.findById(id);
   if (!album || album.isDeleted) throwError(404, "Album not found");
   await deleteImage(album?.image);
+  album.image = null;
   album.isDeleted = true;
   album.isActive = false;
   album.updatedAt = new Date();

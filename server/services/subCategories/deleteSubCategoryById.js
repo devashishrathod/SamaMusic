@@ -9,6 +9,7 @@ exports.deleteSubCategoryById = async (id) => {
     throwError(404, "subCategory not found");
   }
   await deleteImage(subCategory?.image);
+  subCategory.image = null;
   subCategory.isDeleted = true;
   subCategory.isActive = false;
   subCategory.updatedAt = new Date();
