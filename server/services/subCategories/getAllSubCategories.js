@@ -39,16 +39,41 @@ exports.getAllSubCategories = async (query) => {
     }
   }
   const pipeline = [{ $match: match }];
+  pipeline.push(
+    {
+      $lookup: {
+        from: "categories",
+        localField: "categoryId",
+        foreignField: "_id",
+        as: "category",
+        pipeline: [
+          {
+            $project: {
+              name: 1,
+              image: 1,
+              description: 1,
+              isActive: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: {
+        path: "$category",
+        preserveNullAndEmptyArrays: true,
+      },
+    }
+  );
   pipeline.push({
     $project: {
       name: 1,
       description: 1,
       image: 1,
-      categoryId: 1,
       isActive: 1,
-      isDeleted: 1,
       createdAt: 1,
       updatedAt: 1,
+      category: 1,
     },
   });
   const sortStage = {};

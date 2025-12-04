@@ -1,7 +1,7 @@
 const { create } = require("./create");
 const { getAll } = require("./getAll");
 const { get } = require("./get");
-// const { update } = require("./update");
+const { update } = require("./update");
 const { deleteMusic } = require("./deleteMusic");
 
 module.exports = {
@@ -9,5 +9,5 @@ module.exports = {
   getAll,
   get,
   deleteMusic,
-  //update
+  update,
 };

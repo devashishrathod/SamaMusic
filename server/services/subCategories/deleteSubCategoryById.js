@@ -1,6 +1,7 @@
 const SubCategory = require("../../models/SubCategory");
 const { throwError, validateObjectId } = require("../../utils");
 const { deleteImage } = require("../uploads");
+const { deleteMusicsBySubCategory } = require("../../helpers/musics");
 
 exports.deleteSubCategoryById = async (id) => {
   validateObjectId(id, "SubCategory Id");
@@ -8,6 +9,7 @@ exports.deleteSubCategoryById = async (id) => {
   if (!subCategory || subCategory.isDeleted) {
     throwError(404, "subCategory not found");
   }
+  await deleteMusicsBySubCategory(subCategory._id);
   await deleteImage(subCategory?.image);
   subCategory.image = null;
   subCategory.isDeleted = true;
