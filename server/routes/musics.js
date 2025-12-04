@@ -7,13 +7,13 @@ const {
   getAll,
   get,
   deleteMusic,
-  // update,
+  update,
 } = require("../controllers/musics");
 
 router.post("/add", isAdmin, create);
 router.get("/getAll", getAll);
 router.get("/:id/get", get);
 router.delete("/:id/delete", isAdmin, deleteMusic);
-// router.put("/:id/update", isAdmin, update);
+router.put("/:id/update", isAdmin, update);
 
 module.exports = router;
