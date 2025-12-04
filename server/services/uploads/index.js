@@ -32,7 +32,7 @@ exports.uploadVideo = async (videoPath) => {
 exports.uploadPDF = async (pdfPath, fileName) => {
   const result = await uploadFile(pdfPath, {
     resource_type: "auto",
-    folder: "PDFs",
+    folder: "Documents",
     public_id: fileName.replace(".pdf", ""),
   });
   if (fs.existsSync(pdfPath)) fs.unlinkSync(pdfPath);
