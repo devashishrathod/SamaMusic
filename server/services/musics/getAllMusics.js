@@ -33,14 +33,6 @@ exports.getAllMusics = async (query) => {
     matchStage.subCategoryId = new mongoose.Types.ObjectId(subCategoryId);
   }
   if (albumId) matchStage.albumId = new mongoose.Types.ObjectId(albumId);
-  if (search) {
-    const searchRegex = new RegExp(search, "i");
-    matchStage.$or = [
-      { title: searchRegex },
-      { description: searchRegex },
-      { artists: searchRegex },
-    ];
-  }
   if (fromDate || toDate) {
     matchStage.createdAt = {};
     if (fromDate) matchStage.createdAt.$gte = new Date(fromDate);
@@ -51,8 +43,110 @@ exports.getAllMusics = async (query) => {
     }
   }
   const pipeline = [{ $match: matchStage }];
-  const sortStage = {};
-  sortStage[sortBy] = sortOrder === "asc" ? 1 : -1;
-  pipeline.push({ $sort: sortStage });
+  pipeline.push({
+    $lookup: {
+      from: "categories",
+      localField: "categoryId",
+      foreignField: "_id",
+      as: "category",
+      pipeline: [
+        { $match: { isDeleted: false } },
+        {
+          $project: {
+            name: 1,
+            description: 1,
+            image: 1,
+            isActive: 1,
+          },
+        },
+      ],
+    },
+  });
+  pipeline.push({
+    $unwind: { path: "$category", preserveNullAndEmptyArrays: true },
+  });
+  pipeline.push({
+    $lookup: {
+      from: "subcategories",
+      localField: "subCategoryId",
+      foreignField: "_id",
+      as: "subCategory",
+      pipeline: [
+        { $match: { isDeleted: false } },
+        {
+          $project: {
+            name: 1,
+            description: 1,
+            image: 1,
+            isActive: 1,
+          },
+        },
+      ],
+    },
+  });
+  pipeline.push({
+    $unwind: { path: "$subCategory", preserveNullAndEmptyArrays: true },
+  });
+  pipeline.push({
+    $lookup: {
+      from: "albums",
+      localField: "albumId",
+      foreignField: "_id",
+      as: "album",
+      pipeline: [
+        { $match: { isDeleted: false } },
+        {
+          $project: {
+            name: 1,
+            description: 1,
+            image: 1,
+            isActive: 1,
+          },
+        },
+      ],
+    },
+  });
+  pipeline.push({
+    $unwind: { path: "$album", preserveNullAndEmptyArrays: true },
+  });
+  if (search) {
+    const regex = new RegExp(search, "i");
+    pipeline.push({
+      $match: {
+        $or: [
+          { title: regex },
+          { description: regex },
+          { artists: regex },
+          { "category.name": regex },
+          { "category.description": regex },
+          { "subCategory.name": regex },
+          { "subCategory.description": regex },
+          { "album.name": regex },
+          { "album.description": regex },
+        ],
+      },
+    });
+  }
+  pipeline.push({
+    $project: {
+      _id: 1,
+      title: 1,
+      description: 1,
+      artists: 1,
+      releaseDate: 1,
+      durationInSeconds: 1,
+      audio: 1,
+      image: 1,
+      isActive: 1,
+      createdAt: 1,
+      updatedAt: 1,
+      category: 1,
+      subCategory: 1,
+      album: 1,
+    },
+  });
+  pipeline.push({
+    $sort: { [sortBy]: sortOrder === "asc" ? 1 : -1 },
+  });
   return await pagination(Music, pipeline, page, limit);
 };
