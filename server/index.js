@@ -12,16 +12,16 @@ const allRoutes = require("./routes");
 const app = express();
 const port = process.env.PORT || 6000;
 
-app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
-app.use(express.json());
 app.use(
   cors({
-    origin: ["https://api.samasong.com"],
+    origin: ["https://samasongadmin.com"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
   })
 );
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
+app.use(express.json());
 app.use(morgan("dev"));
 app.use("/sama-music/", allRoutes);
 app.get("/", async (req, res) => {
