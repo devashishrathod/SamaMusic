@@ -12,15 +12,30 @@ const allRoutes = require("./routes");
 const app = express();
 const port = process.env.PORT || 6000;
 
-app.use(
-  cors({
-    origin: ["https://samasongadmin.com"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Authorization", "Content-Type"],
-    exposedHeaders: ["Authorization"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["https://samasongadmin.com"],
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Authorization", "Content-Type"],
+//     exposedHeaders: ["Authorization"],
+//   })
+// );
+
+const allowedOrigins = [
+  "https://samasongadmin.com",
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  next();
+});
+
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 app.use(express.json());
 app.use(morgan("dev"));
