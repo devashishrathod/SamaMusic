@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
+//const cors = require("cors");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 
@@ -12,36 +12,13 @@ const allRoutes = require("./routes");
 const app = express();
 const port = process.env.PORT || 6000;
 
-// app.use(
-//   cors({
-//     origin: ["https://samasongadmin.com"],
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-//     allowedHeaders: ["Authorization", "Content-Type"],
-//     exposedHeaders: ["Authorization"],
-//   })
-// );
-
-const allowedOrigins = [
-  "https://samasongadmin.com",
-  "http://localhost:5173",
-  "http://localhost:5174",
-];
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  next();
-});
-
-app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 app.use(morgan("dev"));
 app.use("/sama-music/", allRoutes);
-app.get("/", async (req, res) => {
-  res.send("Welcome to Sama Songs🎶🚀");
+app.get("/", (req, res) => {
+  res.send("Welcome to Sama Songs 🎶🚀");
 });
 app.use((req, res, next) => {
   throwError(404, "Invalid API");
@@ -49,6 +26,6 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 mongoDb();
-app.listen(port, () =>
-  console.log(`Server running on http://localhost:${port}`)
-);
+app.listen(port, () => {
+  console.log(`✅ Server running on http://localhost:${port}`);
+});
