@@ -16,8 +16,9 @@ app.use(
   cors({
     origin: ["https://samasongadmin.com"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Authorization", "Content-Type"],
+    exposedHeaders: ["Authorization"],
   })
 );
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
